@@ -169,15 +169,18 @@ public with sharing class SOQL {
      */
     public static List<String> getContactNamesByAccount(Id accountId) {
         // Create a list to hold the Contact LastNames
+        List<String> lastNames = new List<String>();
 
         // Query the Contacts
+        List<Contact> contacts = [SELECT Id, LastName, AccountId FROM Contact WHERE AccountId = :accountId];
+
         // Loop through each Contact and add the LastName to the list
-        //for () {
-        //    
-        //}
+        for (Contact con : contacts) {
+            lastNames.add(con.LastName);
+        }
 
         // Return the list of Contact LastNames
-        return null; // Replace null with the variable you used to store the result
+        return lastNames; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -189,9 +192,11 @@ public with sharing class SOQL {
      */
     public static Decimal getTotalRevenueByStage(String stage) {
         // Use AggregateQuery to get the total revenue
+        AggregateResult[] revenue = [SELECT SUM(Amount)sumRevenue FROM Opportunity WHERE StageName = :stage OR Amount > 10000];
+        Decimal totalRevenue = (Decimal)revenue[0].get('sumRevenue');
 
         // Return the total revenue
-        return null; // Replace null with the variable you used to store the result
+        return totalRevenue; // Replace null with the variable you used to store the result
     }
 
     /**
