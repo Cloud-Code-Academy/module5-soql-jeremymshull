@@ -477,9 +477,6 @@ public with sharing class SOQL {
         //Use the getOpportunityDetailsForClosedWon() method to get the Opportunities
         List<Opportunity> closedWonOppts = getOpportunityDetailsForClosedWon();
 
-        // Create a set of Account Ids from the Opportunities
-        Set<Id> acctIds = new Set<Id>();
-
         // Query the Contacts
         List<Contact> contacts = [SELECT Id, AccountId FROM Contact];
 
