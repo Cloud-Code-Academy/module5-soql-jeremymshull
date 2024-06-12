@@ -29,8 +29,10 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetAllLeads method to cover this method
      */
     public static List<Lead> getAllLeads() {
-     List<Lead> allLeads = [SELECT Id, LastName, Company, Phone, Email FROM Lead];
-     return allLeads;
+        return [
+            SELECT Id, LastName, Company, Phone, Email 
+            FROM Lead
+        ];
     }
 
     /**
@@ -41,8 +43,11 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetContactsByFirstName method to cover this method
      */
     public static List<Contact> getContactsByFirstName() {
-        List<Contact> allContactsFirstNameJohn = [SELECT Id, Name FROM Contact WHERE FirstName = 'John'];
-        return allContactsFirstNameJohn;
+        return [
+            SELECT Id, Name 
+            FROM Contact 
+            WHERE FirstName = 'John'
+        ];
     }
 
     /**
@@ -73,8 +78,11 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
      */
     public static List<Opportunity> getClosedWonOpportunityCountByAccount(Id accountId) {
-        List<Opportunity> oppList = [SELECT Id, Name, StageName, AccountId, CloseDate, Amount FROM Opportunity WHERE StageName = 'Closed Won' AND AccountId = :accountId];
-        return oppList;
+        return [
+            SELECT Id, Name, StageName, AccountId, CloseDate, Amount 
+            FROM Opportunity 
+            WHERE StageName = 'Closed Won' AND AccountId = :accountId
+        ];
     }
 
     /**
@@ -85,8 +93,10 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetAccountCount method to cover this method
      */
     public static Integer getAccountCount() {
-        Integer accountCount = [SELECT COUNT() FROM Account];
-        return accountCount;
+        return [
+            SELECT COUNT() 
+            FROM Account
+        ];
     }
 
     /**
@@ -109,8 +119,11 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetContactsByEmailDomain method to cover this method
      */
     public static List<Contact> getContactsByEmailDomain() {
-        List<Contact> contactsByDomain = [SELECT Id, Name, Email FROM Contact WHERE Email LIKE '%example.com'];
-        return contactsByDomain;
+        return [
+            SELECT Id, Name, Email 
+            FROM Contact 
+            WHERE Email LIKE '%example.com'
+        ];
     }
 
     /**
@@ -122,9 +135,11 @@ public with sharing class SOQL {
      */
     public static List<Opportunity> getOpportunitiesByNameKeyword(String keyword) {
         String keywordPattern = '%' + keyword + '%';
-        
-        List<Opportunity> oppNames = [SELECT Id, Name, StageName, CloseDate, AccountId FROM Opportunity WHERE Name LIKE :keywordPattern];
-        return oppNames;
+        return [
+            SELECT Id, Name, StageName, CloseDate, AccountId 
+            FROM Opportunity 
+            WHERE Name LIKE :keywordPattern
+        ];
     }
 
     /**
@@ -133,8 +148,11 @@ public with sharing class SOQL {
      * @return A list of Case records.
      */
     public static List<Case> getFilterCaseOrigins() {
-        List<Case> caseOrigins = [SELECT Id, Status, AccountId, Origin FROM Case WHERE Origin NOT IN ('Web', 'Email', null)];
-        return caseOrigins; // Replace null with the variable you used to store the result
+        return [
+            SELECT Id, Status, AccountId, Origin 
+            FROM Case 
+            WHERE Origin NOT IN ('Web', 'Email', null)
+        ]; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -150,14 +168,12 @@ public with sharing class SOQL {
     public static List<Lead> getLeadsBySourceOrTitle (String leadSource, String keyword) {
         String leadSourcePattern = '%' + leadSource + '%';
         String keywordPattern = '%' + keyword + '%';
-
-        List<Lead> leads = [
+        return [
             SELECT Id, LastName, Company, Phone, Email, LeadSource, Title 
             FROM Lead 
             WHERE LeadSource LIKE :leadSourcePattern 
             OR Title LIKE :keywordPattern
-        ];
-        return leads; 
+        ]; 
     }    
 
     /**
@@ -205,8 +221,12 @@ public with sharing class SOQL {
      * @return A list of the first 10 Accounts ordered by Name.
      */
     public static List<Account> getFirstTenAccounts() {
-        List<Account> firstTenAccounts = [SELECT Id, Name FROM Account ORDER BY Name LIMIT 10];
-        return firstTenAccounts; // Replace null with the variable you used to store the result
+        return [
+            SELECT Id, Name 
+            FROM Account 
+            ORDER BY Name 
+            LIMIT 10
+        ]; // Replace null with the variable you used to store the result
     }
     
     /**
@@ -215,12 +235,11 @@ public with sharing class SOQL {
      * @return A list of Opportunities with an Amount greater than 100,000, ordered by CloseDate, and limited to 5 records.
      */
     public static List<Opportunity> getHighValueOpportunities() {
-        List<Opportunity> highValueOppts = [
+        return [
             SELECT Id, Name, Amount, CloseDate, AccountId 
             FROM Opportunity 
             WHERE Amount > 100000 ORDER BY CloseDate LIMIT 5
-        ];
-        return highValueOppts; // Replace null with the variable you used to store the result
+        ]; // Replace null with the variable you used to store the result
     }
     
     /**
@@ -229,8 +248,12 @@ public with sharing class SOQL {
      * @return A list of Contacts
      */
     public static List<Contact> getBirthdateContacts() {
-        List<Contact> birthdateContacts = [SELECT Id, LastName, Birthdate FROM Contact ORDER BY Birthdate DESC LIMIT 3];
-        return birthdateContacts; // Replace null with the variable you used to store the result
+        return [
+            SELECT Id, LastName, Birthdate 
+            FROM Contact 
+            ORDER BY Birthdate 
+            DESC LIMIT 3
+        ]; // Replace null with the variable you used to store the result
     }
     
     /**
@@ -239,12 +262,11 @@ public with sharing class SOQL {
      * @return A list of Cases
      */
     public static List<Case> getCasesWithStatus() {
-        List<Case> casesWithStatus = [
+        return [
             SELECT Id, Subject, Status, CreatedDate 
             FROM Case ORDER BY CreatedDate 
             LIMIT 10 OFFSET 5
-        ];
-        return casesWithStatus; // Replace null with the variable you used to store the result
+        ]; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -303,7 +325,11 @@ public with sharing class SOQL {
      * @return The Account Name of the Contact.
      */
     public static String getAccountNameForContact(String contactId) {
-        List<Contact> contact = [SELECT Id, Account.Name FROM Contact WHERE Id = :contactID];
+        List<Contact> contact = [
+            SELECT Id, Account.Name 
+            FROM Contact 
+            WHERE Id = :contactID
+        ];
         String accountName = contact[0].Account.Name;
         return accountName; // Replace null with the variable you used to store the result
     }    
@@ -316,13 +342,11 @@ public with sharing class SOQL {
      * @return An Account record with related Opportunities.
      */
     public static Account getAccountAndOpportunitiesFromAccountId(Id accountId) {
-        Account acctsAndOppts = [
+        return [
             SELECT Id, Name, (SELECT Id, Name FROM Opportunities) 
             FROM Account 
             WHERE Id = :accountId
-            LIMIT 1
-        ];
-        return acctsAndOppts; // Replace null with the variable you used to store the result
+        ]; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -345,13 +369,11 @@ public with sharing class SOQL {
         String billingState = acc.BillingState;
 
         // Query the Contacts
-        List<Contact> contsByState = [
+        return [
             SELECT Id, Name, MailingState 
             FROM Contact 
             WHERE MailingState = :billingState
-        ];
-
-        return contsByState; // Replace null with the variable you used to store the result
+        ]; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -388,13 +410,11 @@ public with sharing class SOQL {
         }
  
         // Query the Accounts
-        List<Account> acctsMatching = [
+        return [
             SELECT Id, Name, Website 
             FROM Account
             WHERE Website IN :domains
-        ];
-
-        return acctsMatching; // Replace null with the variable you used to store the result
+        ]; // Replace null with the variable you used to store the result
     }
 
     /**
